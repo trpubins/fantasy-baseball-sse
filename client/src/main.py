@@ -29,8 +29,11 @@ if __name__ == '__main__':
                 content = json.loads(event.data)
                 data = content['data']
                 if content['final_stream']:
-                    df = pd.read_json(data)
-                    print(df)
+                    try:
+                        df = pd.read_json(data)
+                        print(df)
+                    except ValueError as exception:
+                        print(data)
 
                     # close the connection per https://github.com/btubbs/sseclient/issues/10#issuecomment-367886005
                     response.close()

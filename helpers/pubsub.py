@@ -49,7 +49,7 @@ class MessageAnnouncer:
         """
         Finalizes the stream by indicating there is one final message to send over the event stream.
         """
-        self.stream_is_finished = True
+        self.final_stream = True
 
 
     def is_final_stream(self) -> bool:
