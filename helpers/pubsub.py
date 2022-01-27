@@ -1,5 +1,5 @@
 """
-A module that conforms to the Publish-Subscribe pattern.
+A module that conforms to the Publish-Subscribe (pubsub) pattern.
 """
 
 # Standard imports
@@ -16,6 +16,7 @@ class MessageAnnouncer:
 
     def __init__(self):
         self.listeners = []
+        self.final_stream = False
 
 
     def listen(self) -> queue.Queue:
@@ -34,7 +35,7 @@ class MessageAnnouncer:
         Dispatches the specified message to every listener. Additionally, it removes listeners that don't "seem" to be listening anymore.
         We assume that if a message queue is full, then it's because the queue is not being read from anymore.
 
-        :param msg: The message to be relayed (announced) to the listeners
+        :param msg: The message to be relayed (announced) to the listeners.
         """
         for i in reversed(range(len(self.listeners))):
             try:
@@ -44,18 +45,47 @@ class MessageAnnouncer:
                 del self.listeners[i]
 
 
+    def finalize_stream(self):
+        """
+        Finalizes the stream by indicating there is one final message to send over the event stream.
+        """
+        self.stream_is_finished = True
+
+
+    def is_final_stream(self) -> bool:
+        """
+        Retrieve the status of the final event stream.
+
+        :return: True if this is the final event stream, False otherwise.
+        """
+        return self.final_stream
+
+
+def dict_sse(data: str, final_stream: bool) -> dict:
+    """
+    A simple dictionary generator to ensure consistency when packing data to send over an event stream.
+    
+    :param data: The data to be sent over the stream.
+    :param final_stream: Describes if the data is part of the server's final event stream.
+    :return: A dictionary object.
+    """
+    d = dict()
+    d['data'] = data
+    d['final_stream'] = final_stream
+    return d
+
+
 def format_sse(data: str, event=None) -> str:
     """
     Formats a message to be used in an event stream as documented here:
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
-    :param data: The data field for the message
+    :param data: The data field for the message.
     :param event: A string identifying the type of event described. 
-    If this is specified, an event will be dispatched on the browser to the listener for the specified event name
-    :return: The event stream formatted message.
+    If this is specified, an event will be dispatched on the browser to the listener for the specified event name.
+    :return: The (formatted) event stream message.
     """
     msg = f'data: {data}\n\n'
     if event is not None:
         msg = f'event: {event}\n{msg}'
     return msg
-    
