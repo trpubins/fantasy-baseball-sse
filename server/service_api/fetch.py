@@ -6,6 +6,7 @@ Fetches the fantasy baseball data for the microservice.
 import json
 import os
 import sys
+from threading import Thread
 import time
 
 # 3rd party imports
@@ -14,7 +15,6 @@ import pandas as pd
 # Local imports
 sys.path.append('../../')
 from helpers.pubsub import MessageAnnouncer, dict_sse, format_sse
-from helpers.threads import PropagatingThread
 from server.service_api.http_abort import abort_cannot_read_csv, abort_file_not_found
 from server.service_download.download import test
 
@@ -38,13 +38,11 @@ def fetch_data(announcer: MessageAnnouncer, csv_path: str):
 
     if delta_hr > 12:
         # retrieve latest results from internet
-        thread = PropagatingThread(target=test, args=(announcer,csv_path,))  # threading.Thread class needs an iterable of arguments as the args parameter
+        thread = Thread(target=test, args=(announcer,csv_path,))  # threading.Thread class needs an iterable of arguments as the args parameter
         thread.start()
-        thread.join()
     else:
-        thread = PropagatingThread(target=read_csv, args=(announcer,csv_path,))  # threading.Thread class needs an iterable of arguments as the args parameter
+        thread = Thread(target=read_csv, args=(announcer,csv_path,))  # threading.Thread class needs an iterable of arguments as the args parameter
         thread.start()
-        thread.join()
     
     return
     
@@ -73,4 +71,3 @@ def read_csv(announcer: MessageAnnouncer, csv_path: str):
     # publish the message
     announcer.announce(msg=msg)
     return
-    
