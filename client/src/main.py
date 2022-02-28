@@ -17,12 +17,44 @@ sys.path.append('../../')
 from helpers.constants import get_server_addr, get_server_port
 
 
-def handle_sse(url: str):
+def main():
+    """
+    Driver function.
+    """
+    dataframes = {
+        'hitters': dict(),
+        'pitchers': dict()
+    }
+    server_url = f'http://{get_server_addr()}:{get_server_port()}'
+    for player_type in dataframes.keys():
+        for fname in fnames:
+            url = f'{server_url}/mlb/{player_type}/{fname}'
+            try:
+                # handle the SSE stream
+                df = handle_sse(url)
+                dataframes[player_type][fname] = df
+            except requests.HTTPError as exception:
+                # handle non OK statuses gracefully
+                print(exception)
+                try:
+                    # display the HTTPError message if one exists
+                    text = json.loads(exception.response.text)
+                    key = 'message'
+                    if key in text.keys():
+                        print(text[key])
+                except:
+                    pass
+                continue
+
+
+def handle_sse(url: str) -> pd.DataFrame:
     """
     Handles a Server Sent Events (SSE) connection stream between a client and a server.
 
     :param url: The server resource to connect.
+    :return: The data sent over the final stream as a pandas DataFrame.
     """
+    df = None
     client = SSEClient(url)
     response = client.resp
     print(f'\nstatus_code={response.status_code}')
@@ -42,24 +74,8 @@ def handle_sse(url: str):
         else:
             print(data)
     del(client)
+    return df
 
 
 if __name__ == '__main__':    
-    server_url = f'http://{get_server_addr()}:{get_server_port()}'
-    for fname in fnames:
-        url = f'{server_url}/mlb/hitters/{fname}'
-        try:
-            # handle the SSE stream
-            handle_sse(url)
-        except requests.HTTPError as exception:
-            # handle non OK statuses gracefully
-            print(exception)
-            try:
-                # display the HTTPError message if one exists
-                text = json.loads(exception.response.text)
-                key = 'message'
-                if key in text.keys():
-                    print(text[key])
-            except:
-                pass
-            continue
+    main()
