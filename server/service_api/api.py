@@ -15,7 +15,6 @@ sys.path.append('../../')
 from helpers.constants import get_server_addr, get_server_port
 from helpers.paths import up_path
 from helpers.pubsub import MessageAnnouncer
-from helpers.threads import PropagatingThread
 from server.service_api.fetch import fetch_data
 
 
@@ -47,10 +46,8 @@ def get_resource(csv_path: str) -> Response:
     """
     announcer = MessageAnnouncer()
 
-    # fetch the data using a separate thread
-    thread = PropagatingThread(target=fetch_data, args=(announcer,csv_path,))
-    thread.start()
-    thread.join()
+    # fetch the data
+    fetch_data(announcer, csv_path)
 
     return Response(stream(announcer), mimetype='text/event-stream')
 
