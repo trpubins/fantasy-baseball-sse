@@ -49,7 +49,7 @@ This project contains a network config file *network_cfg.json*. The config file 
 
 #### Address
 
-The address refers to the server IP address. The value for the IP address can be internal such as "localhost" or it can be external such as "192.168.1.5".
+The address refers to the server IP address. The value for the IP address can be internal such as localhost (i.e. "127.0.0.1") or it can be external such as "192.168.1.5".
 
 #### Port
 
