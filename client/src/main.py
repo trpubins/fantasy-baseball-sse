@@ -12,8 +12,8 @@ import requests
 from sseclient import SSEClient
 
 # Local imports
-from baseball import *
 sys.path.append('../../')
+import baseball
 from helpers.constants import get_server_addr, get_server_port
 
 
@@ -25,26 +25,38 @@ def main():
         'hitters': dict(),
         'pitchers': dict()
     }
-    server_url = f'http://{get_server_addr()}:{get_server_port()}'
     for player_type in dataframes.keys():
-        for fname in fnames:
-            url = f'{server_url}/mlb/{player_type}/{fname}'
+        dataframes[player_type] = get_mlb_data(player_type)
+    
+
+def get_mlb_data(player_type: str) -> dict:
+    """
+    Retrieves all data from the server for the associated player type.
+
+    :param player_type: The type of mlb player.
+    :return: A dictionary of dataframes where the keys are the filename sources.
+    """
+    dfs = dict()  # a dictionary of dataframes
+    server_url = f'http://{get_server_addr()}:{get_server_port()}'
+    for fname in baseball.fnames:
+        url = f'{server_url}/mlb/{player_type}/{fname}'
+        try:
+            # handle the SSE stream
+            df = handle_sse(url)
+            dfs[fname] = df
+        except requests.HTTPError as exception:
+            # handle non OK statuses gracefully
+            print(exception)
             try:
-                # handle the SSE stream
-                df = handle_sse(url)
-                dataframes[player_type][fname] = df
-            except requests.HTTPError as exception:
-                # handle non OK statuses gracefully
-                print(exception)
-                try:
-                    # display the HTTPError message if one exists
-                    text = json.loads(exception.response.text)
-                    key = 'message'
-                    if key in text.keys():
-                        print(text[key])
-                except:
-                    pass
-                continue
+                # display the HTTPError message if one exists
+                text = json.loads(exception.response.text)
+                key = 'message'
+                if key in text.keys():
+                    print(text[key])
+            except:
+                pass
+            continue
+    return dfs
 
 
 def handle_sse(url: str) -> pd.DataFrame:
