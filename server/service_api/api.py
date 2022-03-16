@@ -4,6 +4,7 @@ a RESTful API.
 """
 
 # Standard imports
+import os
 import sys
 
 # 3rd party imports
@@ -15,7 +16,9 @@ sys.path.append('../../')
 from helpers.constants import get_server_addr, get_server_port
 from helpers.paths import up_path
 from helpers.pubsub import MessageAnnouncer
+from helpers.threads import PropagatingThread
 from server.service_api.fetch import fetch_data
+from server.service_api.http_abort import abort_file_not_found
 
 
 app = Flask(__name__)
@@ -39,15 +42,22 @@ def stream(announcer: MessageAnnouncer):
 
 def get_resource(csv_path: str) -> Response:
     """
-    Creates an event stream response and fetches the data requested by the client.
+    Creates an event stream response and fetches the data requested by the client using threading.
 
     :param csv_path: The absolute path of the csv file.
     :return: The streamed Flask Response.
     """
+    # check that the requested resource exists
+    if not os.path.exists(csv_path):
+        abort_file_not_found(csv_path)
+    
+    # initialize a shared announcer
     announcer = MessageAnnouncer()
 
-    # fetch the data
-    fetch_data(announcer, csv_path)
+    # fetch the data with a separate thread
+    thread = PropagatingThread(target=fetch_data,
+                               args=(announcer,csv_path,))  # threading.Thread class needs an iterable of arguments as the args parameter
+    thread.start()
 
     return Response(stream(announcer), mimetype='text/event-stream')
 
@@ -84,6 +94,7 @@ class Pitchers(Resource):
         return get_resource(csv_path)
 
 
+# register the api endpoints
 api.add_resource(Hitters, '/mlb/hitters/<string:file>')
 api.add_resource(Pitchers, '/mlb/pitchers/<string:file>')
 
