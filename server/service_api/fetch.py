@@ -1,17 +1,16 @@
-"""
-Fetches the fantasy baseball data for the microservice.
+"""Fetches the fantasy baseball data for the microservice.
 """
 
-# Standard imports
+# Standard modules
 import json
 import os
 import sys
 import time
 
-# 3rd party imports
+# 3rd party modules
 import pandas as pd
 
-# Local imports
+# Project modules
 sys.path.append('../../')
 from helpers.pubsub import MessageAnnouncer, dict_sse, format_sse
 from server.service_api.http_abort import abort_cannot_read_csv
@@ -21,12 +20,16 @@ MAX_TIME_BETWEEN_REFRESH = 12  # hrs
 
 
 def fetch_data(announcer: MessageAnnouncer, csv_path: str):
-    """
-    Fetches the csv data from the specified path and publishes the data once retrieved.
+    """Fetches the csv data from the specified path and publishes the data once retrieved.
     Downloads from the internet if data is outdated.
 
-    :param announcer: The object used for publishing messages.
-    :param csv_path: The absolute path of the csv file.
+    Parameters
+    ----------
+    announcer : pubsub.MessageAnnouncer
+        The object used for publishing messages.
+    
+    csv_path : str
+        The absolute path of the csv file.
     """
     # check if file has been modified in the last 12 hours
     mod_time = os.path.getmtime(csv_path)
@@ -45,12 +48,16 @@ def fetch_data(announcer: MessageAnnouncer, csv_path: str):
 
 
 def read_csv(announcer: MessageAnnouncer, csv_path: str):
-    """
-    Attempts to read the comma separated values data at the specified path.
+    """Attempts to read the comma separated values data at the specified path.
     Publishes the data using the announcer if read successfully.
 
-    :param announcer: The object used for publishing messages.
-    :param csv_path: The absolute path of the csv file.
+    Parameters
+    ----------
+    announcer : pubsub.MessageAnnouncer
+        The object used for publishing messages.
+    
+    csv_path : str
+        The absolute path of the csv file.
     """
     df = None
     try:
@@ -72,8 +79,15 @@ def read_csv(announcer: MessageAnnouncer, csv_path: str):
 
 
 def test(announcer: MessageAnnouncer, csv_path: str):
-    """
-    A function used to test the SSE stream.
+    """A function used to test the SSE stream.
+
+    Parameters
+    ----------
+    announcer : pubsub.MessageAnnouncer
+        The object used for publishing messages.
+    
+    csv_path : str
+        The absolute path of the csv file.
     """
     n = 0
     while n <= 3:

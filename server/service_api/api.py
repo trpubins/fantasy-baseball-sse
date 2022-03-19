@@ -1,17 +1,16 @@
-"""
-Microservice that exposes the fantasy baseball hitter and pitcher data over
-a RESTful API.
+"""Microservice that exposes the fantasy baseball hitter and pitcher
+data over a RESTful API.
 """
 
-# Standard imports
+# Standard modules
 import os
 import sys
 
-# 3rd party imports
+# 3rd party modules
 from flask import Flask, Response
 from flask_restful import Api, Resource
 
-# Local imports
+# Project modules
 sys.path.append('../../')
 from helpers.constants import get_server_addr, get_server_port
 from helpers.paths import up_path
@@ -26,10 +25,12 @@ api = Api(app)
 
 
 def stream(announcer: MessageAnnouncer):
-    """
-    Generates messages for SSE event streams.
+    """Generates messages for SSE event streams.
 
-    :param announcer: The object that is announcing new messages as they arrive.
+    Parameters
+    ----------
+    announcer : pubsub.MessageAnnouncer
+        The object that is announcing new messages as they arrive.
     """
     messages = announcer.listen()  # returns a queue.Queue
     is_stream_finished = False
@@ -41,11 +42,18 @@ def stream(announcer: MessageAnnouncer):
 
 
 def get_resource(csv_path: str) -> Response:
-    """
-    Creates an event stream response and fetches the data requested by the client using threading.
+    """Creates an event stream response and fetches the data
+    requested by the client using threading.
 
-    :param csv_path: The absolute path of the csv file.
-    :return: The streamed Flask Response.
+    Parameters
+    ----------
+    csv_path : str
+        The absolute path of the csv file.
+
+    Returns
+    -------
+    flask.Response
+        The streamed Flask Response.
     """
     # check that the requested resource exists
     if not os.path.exists(csv_path):
@@ -63,15 +71,20 @@ def get_resource(csv_path: str) -> Response:
 
 
 class Hitters(Resource):
-    """
-    A resource representing MLB hitters.
-    """
+    """A resource representing MLB hitters."""
+    
     def get(self, file: str) -> Response:
-        """
-        Retrieves the data from the specified file.
+        """Retrieves the data from the specified file.
 
-        :param file: The name of the csv file.
-        :return: The streamed Flask Response.
+        Parameters
+        ----------
+        file : str
+            The name of the csv file.
+        
+        Returns
+        -------
+        flask.Response
+            The streamed Flask Response.
         """
         # convert the requested resource into a file path
         csv_path = up_path(__file__, 2) + f'/data/hitter_projections/{file}.csv'
@@ -79,15 +92,20 @@ class Hitters(Resource):
 
 
 class Pitchers(Resource):
-    """
-    A resource representing MLB pitchers.
-    """
+    """A resource representing MLB pitchers."""
+    
     def get(self, file: str):
-        """
-        Retrieves the data from the specified file.
+        """Retrieves the data from the specified file.
 
-        :param file: The name of the csv file.
-        :return: The streamed Flask Response.
+        Parameters
+        ----------
+        file : str
+            The name of the csv file.
+        
+        Returns
+        -------
+        flask.Response
+            The streamed Flask Response.
         """
         # convert the requested resource into a file path
         csv_path = up_path(__file__, 2) + f'/data/pitcher_projections/{file}.csv'
