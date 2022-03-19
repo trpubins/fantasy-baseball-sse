@@ -8,7 +8,6 @@ import sys
 from flask_restful import abort
 
 # Project modules
-sys.path.append('../../')
 from helpers.constants import HttpStatus
 
 

@@ -20,7 +20,7 @@ A virtual environment is recommended to separate Python system packages from pro
 
 ### 1. Create Virtual Environment
 
-Start by creating a Python virtual environment that references a specific Python interpreter accessible to the user. From a terminal inside the `fantasy-baseball` dir, run
+Start by creating a Python virtual environment that references a specific Python interpreter accessible to the user. From a terminal inside the project root dir, run
 
 ```bash
 <path-to-python3.9> -m venv .venv
@@ -28,7 +28,7 @@ Start by creating a Python virtual environment that references a specific Python
 
 ### 2. Activate Virtual Environment
 
-To activate the Python virtual environment, open a bash terminal from the `fantasy-baseball` dir, and run the following command
+To activate the Python virtual environment, open a bash terminal from the project root dir, and run the following command
 
 ```bash
 source .venv/bin/activate
@@ -50,7 +50,7 @@ deactivate
 
 ## Requirements
 
-The project requires `Python 3.9`. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so:
+The project requires `Python 3.9`. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so
 
 ```bash
 # Download dependencies
@@ -63,20 +63,20 @@ If a virtual environment was created, dependencies will be installed only in the
 
 ### Server
 
-The server shall be launched before the client app. It is necessary to launch the server from the specified directory. From the project's root directory, navigate to *server/service-api/* and run the following command from a terminal:
+The server shall be launched `before` the client app. It is necessary to launch the server from the project root directory, otherwise an error will be returned stating that project modules can't be imported. From the project root run the following command
 
 ```bash
 # Run API microservice
-python api.py
+python server/service_api/api.py
 ```
 
 ### Client
 
-Next, the client app can be launched. It is necessary to launch the client from the specified directory. From the project's root directory, navigate to *client/src/* and run the following command from a terminal:
+Next, the client app can be launched. It is necessary to launch the client from the project root directory, otherwise an error will be returned stating that project modules can't be imported. From the project root run the following command
 
 ```bash
 # Run client application
-python main.py
+python client/src/main.py
 ```
 
 ### Network Config File

@@ -11,7 +11,6 @@ import time
 import pandas as pd
 
 # Project modules
-sys.path.append('../../')
 from helpers.pubsub import MessageAnnouncer, dict_sse, format_sse
 from server.service_api.http_abort import abort_cannot_read_csv
 

@@ -11,7 +11,7 @@ from flask import Flask, Response
 from flask_restful import Api, Resource
 
 # Project modules
-sys.path.append('../../')
+sys.path.append(os.path.realpath('.'))
 from helpers.constants import get_server_addr, get_server_port
 from helpers.paths import up_path
 from helpers.pubsub import MessageAnnouncer
