@@ -1,31 +1,46 @@
-"""
-A utility for navigating directory hierarchies on-disk.
+"""A utility for navigating directory hierarchies on-disk.
 """
 
-# Standard imports
+# Standard modules
 import os
 
 
-def sub_folder(folder_name: str) -> str:
+def get_sub_dir(dirname: str, sub_dirname: str) -> str:
+    """Retrieve the absolute path of the sub-directory, which is at the same level
+    as the specified directory.
+    
+    Parameters
+    ----------
+    dirname : str
+        The name of the working directory.
+
+    sub_dirname : str
+        The name of the sub-directory.
+
+    Returns
+    -------
+    str
+        The absolute pathname to the sub-directory.
     """
-    Generates the absolute path to subfolder in the current working directory.
+    return os.path.abspath(os.path.join(os.path.dirname(dirname), sub_dirname))
 
-    :param folder_name: The name of the subfolder
-    :return: The absolute pathname of the subfolder
+
+def up_path(start_path: str, n: int = 1) -> str:
+    """Traverse up n levels from the specified path.
+
+    Parameters
+    ----------
+    start_path : str
+        The absolute pathname of the directory from which to start.
+
+    n : int, optional
+        The number of levels to traverse up the directory structure.
+        Default is `1`.
+    
+    Returns
+    -------
+    str
+        The absolute pathname to the nth level-up directory
     """
-
-    subfolder = folder_name
-    return up_path(__file__, 1) + '/' + subfolder
-
-
-def up_path(path: str, n: int) -> str:
-    """
-    Function for traversing up n levels from the specified path.
-
-    :param path: The absolute pathname of the directory
-    :param n: The number of levels to traverse up the directory structure
-    :return: The absolute pathname to the nth level-up directory
-    """
-
-    return os.sep.join(path.split(os.sep)[:-n])
+    return os.path.abspath(os.sep.join(start_path.split(os.sep)[:-n]))
     
