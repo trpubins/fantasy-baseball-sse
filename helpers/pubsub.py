@@ -1,15 +1,14 @@
-"""
-A module that conforms to the Publish-Subscribe (pubsub) pattern.
+"""A module that conforms to the Publish-Subscribe (pubsub) pattern.
 """
 
-# Standard imports
+# Standard modules
 import queue  # this module is thread-safe
 
 
 class MessageAnnouncer:
-    """
-    Class that implements the pubsub pattern so messages are not directly sent to listeners. 
-    Instead, this class relays messages to the listeners. The advantage is that the message emitter doesn't have to check that the message gets dispatched correctly. 
+    """Class that implements the pubsub pattern so messages are not directly sent to listeners. 
+    Instead, this class relays messages to the listeners. The advantage is that the message
+    emitter doesn't have to check that the message gets dispatched correctly.
     This class is delegated for such purpose.
     See https://maxhalford.github.io/blog/flask-sse-no-deps/
     """
@@ -20,10 +19,12 @@ class MessageAnnouncer:
 
 
     def listen(self) -> queue.Queue:
-        """
-        Allows a client to start listening on an HTTP stream.
+        """Allows a client to start listening on an HTTP stream.
 
-        :return: A queue where new messages will be delivered.
+        Returns
+        -------
+        queue.Queue
+            A queue where new messages will be delivered.
         """
         q = queue.Queue(maxsize=5)
         self.listeners.append(q)
@@ -31,11 +32,15 @@ class MessageAnnouncer:
 
 
     def announce(self, msg: str):
-        """
-        Dispatches the specified message to every listener. Additionally, it removes listeners that don't "seem" to be listening anymore.
-        We assume that if a message queue is full, then it's because the queue is not being read from anymore.
+        """Dispatches the specified message to every listener. Additionally,
+        it removes listeners that don't "seem" to be listening anymore.
+        We assume that if a message queue is full, then it's because the queue
+        is not being read from anymore.
 
-        :param msg: The message to be relayed (announced) to the listeners.
+        Parameters
+        ----------
+        msg : str
+            The message to be relayed (announced) to the listeners.
         """
         for i in reversed(range(len(self.listeners))):
             try:
@@ -46,28 +51,38 @@ class MessageAnnouncer:
 
 
     def finalize_stream(self):
-        """
-        Finalizes the stream by indicating there is one final message to send over the event stream.
-        """
+        """Finalizes the stream by indicating there is one final message
+        to send over the event stream."""
         self.final_stream = True
 
 
     def is_final_stream(self) -> bool:
-        """
-        Retrieve the status of the final event stream.
+        """Retrieve the status of the final event stream.
 
-        :return: True if this is the final event stream, False otherwise.
+        Returns
+        -------
+        bool
+            True if this is the final event stream, False otherwise.
         """
         return self.final_stream
 
 
 def dict_sse(data: str, final_stream: bool) -> dict:
-    """
-    A simple dictionary generator to ensure consistency when packing data to send over an event stream.
+    """A simple dictionary generator to ensure consistency when packing
+    data to send over an event stream.
     
-    :param data: The data to be sent over the stream.
-    :param final_stream: Describes if the data is part of the server's final event stream.
-    :return: A dictionary object.
+    Parameters
+    ----------
+    data : str
+        The data to be sent over the stream.
+    
+    final_stream : bool
+        Describes if the data is part of the server's final event stream.
+    
+    Returns
+    -------
+    dict
+        A dictionary with keys: `data` and `final_stream`.
     """
     d = dict()
     d['data'] = data
@@ -75,15 +90,25 @@ def dict_sse(data: str, final_stream: bool) -> dict:
     return d
 
 
-def format_sse(data: str, event=None) -> str:
-    """
-    Formats a message to be used in an event stream as documented here:
+def format_sse(data: str, event: str = None) -> str:
+    """Formats a message to be used in an event stream as documented here:
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
-    :param data: The data field for the message.
-    :param event: A string identifying the type of event described. 
-    If this is specified, an event will be dispatched on the browser to the listener for the specified event name.
-    :return: The (formatted) event stream message.
+    Parameters
+    ----------
+    data : str
+        The data field for the message.
+    
+    event : str, optional
+        A string identifying the type of event described. If this is specified,
+        an event will be dispatched on the browser to the listener for the specified
+        event name.
+        Default is `None`.
+    
+    Returns
+    -------
+    str
+        The (formatted) event stream message.
     """
     msg = f'data: {data}\n\n'
     if event is not None:
