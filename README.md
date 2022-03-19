@@ -1,6 +1,6 @@
-# Fantasy-Baseball
+# Fantasy Baseball
 
-Fantasy-Baseball is a Python project that utilizes microservices to generate
+This project utilizes a microservices framework to generate
 player values (in auction $$) for use in a fantasy baseball auction draft.
 
 ## Motivation
@@ -12,16 +12,52 @@ A tool to automate the auction value generation process is paramount to fantasy 
 
 ## Architecture
 
-This project was architected as a client-server application, whereby the server downloads and persists projection spreadsheets from the internet and exposes the data over a RESTful API. The client makes http *GET* requests to the API to retrieve the projection data.
+This project was architected as a client-server application, whereby the server downloads and persists projection spreadsheets from the internet and exposes the data over a RESTful API. The client makes HTTP `GET` requests to the API to retrieve the projection data.
+
+## Virtual Environment (Recommended)
+
+A virtual environment is recommended to separate Python system packages from project-specific packages. The instructions to initialize and activate a Python virtual environment are provided below.
+
+### 1. Create Virtual Environment
+
+Start by creating a Python virtual environment that references a specific Python interpreter accessible to the user. From a terminal inside the `fantasy-baseball` dir, run
+
+```bash
+<path-to-python3.9> -m venv .venv
+```
+
+### 2. Activate Virtual Environment
+
+To activate the Python virtual environment, open a bash terminal from the `fantasy-baseball` dir, and run the following command
+
+```bash
+source .venv/bin/activate
+```
+
+Confirm the virtual environment is active by typing
+
+```bash
+which python
+```
+
+It should be in the .venv dir: `.../.venv/bin/python`.
+
+If the system Python interpreter and its associated packages are needed, deactivating the virtual environment is as simple as running
+
+```bash
+deactivate
+```
 
 ## Requirements
 
-The project requires Python 3.9. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so:
+The project requires `Python 3.9`. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so:
 
 ```bash
 # Download dependencies
 pip install -r requirements.txt
 ```
+
+If a virtual environment was created, dependencies will be installed only in the virtual environment and will not pollute the Python system package space.
 
 ## Usage
 
@@ -45,7 +81,7 @@ python main.py
 
 ### Network Config File
 
-This project contains a network config file *network_cfg.json*. The config file contains two properties: "address" and "port".
+This project contains a network config file *network_cfg.json*. The config file contains two properties: (1) `address` and (2) `port`.
 
 #### Address
 
