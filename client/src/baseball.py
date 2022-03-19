@@ -1,5 +1,4 @@
-"""
-Contains data in support of a fantasy baseball client application.
+"""Contains data in support of a fantasy baseball client application.
 """
 
 
