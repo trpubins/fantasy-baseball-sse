@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "main.py",
-            "cwd": "${workspaceRoot}/client/src",
+            "cwd": "${workspaceRoot}/client",
             "console": "integratedTerminal"
         },
         {
@@ -17,7 +17,7 @@
             "type": "python",
             "request": "launch",
             "program": "api.py",
-            "cwd": "${workspaceRoot}/server/service_api",
+            "cwd": "${workspaceRoot}/server",
             "console": "integratedTerminal"
         },
     ]

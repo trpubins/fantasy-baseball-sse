@@ -12,7 +12,7 @@ import pandas as pd
 
 # Project modules
 from helpers.pubsub import MessageAnnouncer, dict_sse, format_sse
-from server.service_api.http_abort import abort_cannot_read_csv
+from server.http_abort import abort_cannot_read_csv
 
 # Constants
 MAX_TIME_BETWEEN_REFRESH = 12  # hrs

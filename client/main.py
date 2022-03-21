@@ -12,7 +12,7 @@ import requests
 from sseclient import SSEClient
 
 # Project modules
-sys.path.append(os.path.realpath('.'))
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 import baseball
 from helpers.constants import get_server_addr, get_server_port
 from helpers.log import get_logger

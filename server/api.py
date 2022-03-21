@@ -11,13 +11,13 @@ from flask import Flask, Response
 from flask_restful import Api, Resource
 
 # Project modules
-sys.path.append(os.path.realpath('.'))
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 from helpers.constants import get_server_addr, get_server_port
 from helpers.paths import up_path
 from helpers.pubsub import MessageAnnouncer
 from helpers.threads import PropagatingThread
-from server.service_api.fetch import fetch_data
-from server.service_api.http_abort import abort_file_not_found
+from server.fetch import fetch_data
+from server.http_abort import abort_file_not_found
 
 
 app = Flask(__name__)
@@ -87,7 +87,7 @@ class Hitters(Resource):
             The streamed Flask Response.
         """
         # convert the requested resource into a file path
-        csv_path = up_path(__file__, 2) + f'/data/hitter_projections/{file}.csv'
+        csv_path = up_path(__file__, 1) + f'/data/hitter_projections/{file}.csv'
         return get_resource(csv_path)
 
 
@@ -108,7 +108,7 @@ class Pitchers(Resource):
             The streamed Flask Response.
         """
         # convert the requested resource into a file path
-        csv_path = up_path(__file__, 2) + f'/data/pitcher_projections/{file}.csv'
+        csv_path = up_path(__file__, 1) + f'/data/pitcher_projections/{file}.csv'
         return get_resource(csv_path)
 
 
