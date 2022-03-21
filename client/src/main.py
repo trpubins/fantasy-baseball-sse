@@ -15,13 +15,17 @@ from sseclient import SSEClient
 sys.path.append(os.path.realpath('.'))
 import baseball
 from helpers.constants import get_server_addr, get_server_port
+from helpers.log import get_logger
+
+# Configure logging
+LOG = get_logger(__name__)
 
 
 def main():
     """Driver function."""
     dataframes = {
         'hitters': dict(),
-        'pitchers': dict()
+        # 'pitchers': dict()
     }
     for player_type in dataframes.keys():
         dataframes[player_type] = get_mlb_data(player_type)
@@ -51,13 +55,13 @@ def get_mlb_data(player_type: str) -> dict:
             dfs[fname] = df
         except requests.HTTPError as exception:
             # handle non OK statuses gracefully
-            print(exception)
+            LOG.error(exception)
             try:
                 # display the HTTPError message if one exists
                 text = json.loads(exception.response.text)
                 key = 'message'
                 if key in text.keys():
-                    print(text[key])
+                    LOG.error(text[key])
             except:
                 pass
             continue
@@ -81,23 +85,23 @@ def handle_sse(url: str) -> pd.DataFrame:
     df = None
     client = SSEClient(url)
     response = client.resp
-    print(f'\nstatus_code={response.status_code}')
+    LOG.info(f'status_code={response.status_code}')
     for event in client:
         content = json.loads(event.data)
         data = content['data']
         if content['final_stream']:
             try:
                 df = pd.read_json(data)
-                print(df)
+                LOG.info(f'\n{df}')
             except ValueError as exception:
-                print(data)
+                LOG.error(exception)
 
             # close the connection per 
             # https://github.com/btubbs/sseclient/issues/10#issuecomment-367886005
             response.close()
             break
         else:
-            print(data)
+            LOG.info(data)
     del(client)
     return df
 

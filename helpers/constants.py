@@ -7,7 +7,11 @@ import json
 import sys
 
 # Project modules
+from helpers.log import get_logger
 from helpers.paths import up_path
+
+# Configure logging
+LOG = get_logger(__name__)
 
 
 # Below url shows that 'int' is necessary as first param to make this Enum JSON serializable
@@ -67,5 +71,5 @@ try:
         addr = str(data['address'])
         port = str(data['port'])
 except Exception as e:
-    print(e)
+    LOG.error(e)
     sys.exit()
