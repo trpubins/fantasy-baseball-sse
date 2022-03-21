@@ -5,12 +5,14 @@
 import logging
 from typing import Union
 
+# 3rd party modules
+import coloredlogs
+
 
 def get_logger(name: str, level: Union[int, str] = logging.DEBUG) \
                -> logging.Logger:
-    """Configures a logger for modules by setting a
-    formatter and adding a stream handler. Also, sets
-    the log level.
+    """Configures a logger for modules by setting the log level
+    and format. Colors the terminal output.
 
     Parameters
     ----------
@@ -27,12 +29,8 @@ def get_logger(name: str, level: Union[int, str] = logging.DEBUG) \
         The configured logger obj.
     """
     logger = logging.getLogger(name)
-    stream_handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s','%m-%d %H:%M:%S'
-    )
-    stream_handler.setFormatter(formatter)
-    logger.addHandler(stream_handler)
-    logger.setLevel(level)
+    format = '[%(asctime)s] %(hostname)s {%(name)s:%(lineno)d} %(levelname)s - %(message)s'
+    date_format = '%m-%d %H:%M:%S'
+    coloredlogs.install(level=level, logger=logger, fmt=format, datefmt=date_format)
     return logger
     

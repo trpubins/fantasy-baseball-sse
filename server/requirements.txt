@@ -1,3 +1,4 @@
+coloredlogs==15.0.1
 Flask==2.0.2
 flask-restful==0.3.9
 pandas==1.4.0
