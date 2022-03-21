@@ -4,7 +4,6 @@
 # Standard modules
 import json
 import os
-import sys
 import time
 
 # 3rd party modules

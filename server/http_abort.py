@@ -1,9 +1,6 @@
 """Functions for a server to abort an HTTP session with a client.
 """
 
-# Standard modules
-import sys
-
 # 3rd party modules
 from flask_restful import abort
 
