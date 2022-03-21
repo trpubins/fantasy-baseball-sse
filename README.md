@@ -63,20 +63,20 @@ If a virtual environment was created, dependencies will be installed only in the
 
 ### Server
 
-The server shall be launched `before` the client app. It is necessary to launch the server from the project root directory, otherwise an error will be returned stating that project modules can't be imported. From the project root run the following command
+The server shall be launched `before` the client app. From the project root run the following command
 
 ```bash
 # Run API microservice
-python server/service_api/api.py
+python server/api.py
 ```
 
 ### Client
 
-Next, the client app can be launched. It is necessary to launch the client from the project root directory, otherwise an error will be returned stating that project modules can't be imported. From the project root run the following command
+Next, the client app can be launched. From the project root run the following command
 
 ```bash
 # Run client application
-python client/src/main.py
+python client/main.py
 ```
 
 ### Network Config File
