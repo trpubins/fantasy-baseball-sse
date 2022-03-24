@@ -85,7 +85,7 @@ def handle_sse(url: str) -> pd.DataFrame:
     df = None
     client = SSEClient(url)
     response = client.resp
-    LOG.info(f'status_code={response.status_code}')
+    LOG.success(f'status_code={response.status_code}')
     for event in client:
         content = json.loads(event.data)
         data = content['data']

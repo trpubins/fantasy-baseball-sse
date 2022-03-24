@@ -7,6 +7,11 @@ from typing import Union
 
 # 3rd party modules
 import coloredlogs
+from haggis.logs import add_logging_level
+
+# Map new 'SUCCESS' log level to bold/green format per coloredlogs docs
+# https://coloredlogs.readthedocs.io/en/latest/api.html#about-the-defaults
+add_logging_level('SUCCESS', 35)  
 
 
 def get_logger(name: str, level: Union[int, str] = logging.DEBUG) \
