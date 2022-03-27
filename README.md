@@ -23,7 +23,7 @@ A virtual environment is recommended to separate Python system packages from pro
 Start by creating a Python virtual environment that references a specific Python interpreter accessible to the user. From a terminal inside the project root dir, run
 
 ```bash
-<path-to-python3.9> -m venv .venv
+<path-to-python39> -m venv .venv
 ```
 
 ### 2. Activate Virtual Environment
@@ -50,7 +50,7 @@ deactivate
 
 ## Requirements
 
-The project requires `Python 3.9`. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so
+The project was built with `Python 3.9`; other versions of `Python 3` may work but have not been tested. Dependencies are captured in *requirements.txt* files, which are intended to be installed using pip like so
 
 ```bash
 # Download dependencies
