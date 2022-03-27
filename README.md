@@ -23,7 +23,7 @@ A virtual environment is recommended to separate Python system packages from pro
 Start by creating a Python virtual environment that references a specific Python interpreter accessible to the user. From a terminal inside the project root dir, run
 
 ```bash
-<path-to-python39> -m venv .venv
+< path-to-python3.9 > -m venv .venv
 ```
 
 ### 2. Activate Virtual Environment
