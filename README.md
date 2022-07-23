@@ -1,6 +1,6 @@
 # Fantasy Baseball
 
-This project utilizes a microservices framework to generate
+This project utilizes a server-sent-events (SSE) framework to generate
 player values (in auction $$) for use in a fantasy baseball auction draft.
 
 ## Motivation
